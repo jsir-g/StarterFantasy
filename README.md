@@ -32,15 +32,16 @@ If you’re interested in contributing to this project, feel free to reach out t
 To get started with running the app locally, please follow these steps:
 
 1. Clone the repository.
-2. Install the necessary dependencies using:
+2. cd client
+3. Install the necessary dependencies using:
    ```
    npm install
    ```
-3. Start the application:
+4. Start the application:
    ```
    npm start
    ```
-4. Access the app through your local Expo environment (on mobile, make sure you have the Expo Go App downloaded then scan the printed QR code)
+5. Access the app through your local Expo environment (on mobile, make sure you have the Expo Go App downloaded then scan the printed QR code)
 
 ---
 
