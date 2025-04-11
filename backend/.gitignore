@@ -1,0 +1,28 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Database or cache files (if using locally)
+*.sqlite3
+
+# Pytest / coverage
+htmlcov/
+.coverage
+.pytest_cache/
