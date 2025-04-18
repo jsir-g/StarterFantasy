@@ -1,4 +1,5 @@
-from team_controller import *
+import os
+from team_controller import get_current_week, get_season_data
 
 class Team:
     def __init__(self, name):
@@ -8,68 +9,57 @@ class Team:
 
     def __repr__(self):
         return f"Team(name={self.name})"
-    
-    
-    # Load environment variables (ensure you've set SPORTRADAR_API_KEY)
-    SPORTRADAR_API_KEY = os.getenv('SPORTRADAR_API_KEY', 'M31MHThjj9azPcbv3OTqSs3mSTWTKSz8VMthJGrZ')
 
-    #returns the teams playing for a certain week
+    # Returns the teams playing for a certain week
+    @staticmethod
     def teams_playing(week, team_names=None):
         data = get_current_week(week)
 
         if team_names is None:
             team_names = []
-        
-        week = data.get('week', {})
 
-        games = week.get('games', {})
+        games = data.get('week', {}).get('games', [])
 
         for game in games:
-            home_team = game.get('home').get('name')
-            away_team = game.get('away').get('name')
+            home_team = game.get('home', {}).get('name')
+            away_team = game.get('away', {}).get('name')
 
-            if home_team not in team_names:
+            if home_team and home_team not in team_names:
                 team_names.append(home_team)
-            if away_team not in team_names:
+            if away_team and away_team not in team_names:
                 team_names.append(away_team)
-        
+
         return team_names
 
-    #returns whether team won or lost in a certain week
+    # Returns whether this team won or lost in a certain week
     def win_or_loss(self, week):
-        # Parse the JSON data from the response
         data = get_current_week(week)
+        games = data.get('week', {}).get('games', [])
 
-        week = data.get('week', {})
-        for game in week.get('games', {}):
+        for game in games:
             home_team = game.get('home', {}).get('name')
             away_team = game.get('away', {}).get('name')
             home_points = game.get('scoring', {}).get('home_points')
             away_points = game.get('scoring', {}).get('away_points')
-            
-            if home_team == self.name:
-                if home_points > away_points:
-                    return True
-                else:
-                    return False
-            elif away_team == self.name:
-                if away_points > home_points:
-                    return True
-                else:
-                    return False
-        
+
+            if self.name == home_team and home_points is not None and away_points is not None:
+                return home_points > away_points
+            elif self.name == away_team and home_points is not None and away_points is not None:
+                return away_points > home_points
+
         return 'no game found'
 
-    def team_record(self, data, week):
+    # Returns the team's record from season data
+    def team_record(self, week=None):
         data = get_season_data()
+        conferences = data.get('conferences', [])
 
-        print(f"Finding win/loss for team: {self.name}")
-        
-        conference = data.get('conferences', {})
+        for conference in conferences:
+            divisions = conference.get('divisions', [])
+            for division in divisions:
+                teams = division.get('teams', [])
+                for team in teams:
+                    if team.get('name') == self.name:
+                        return team.get('wins'), team.get('losses')
 
-        for division in conference.get('divisions', {}):
-            for team in division.get('teams', {}):
-                if team.get('name') == self.name:
-                    return team.get('wins'), team.get('losses')
-        
-        return 'no game found'
+        return 'record not found'
