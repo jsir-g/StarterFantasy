@@ -26,3 +26,6 @@ venv/
 htmlcov/
 .coverage
 .pytest_cache/
+
+# filepath: .gitignore
+*:Zone.Identifier
