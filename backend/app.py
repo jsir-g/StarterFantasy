@@ -15,3 +15,6 @@ app.register_blueprint(highlightly_bp)
 @app.route("/")
 def home():
     return "Starter Fantasy Backend is running!"
+
+if __name__ == "__main__":
+    app.run(debug=True)
