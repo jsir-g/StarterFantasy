@@ -1,0 +1,61 @@
+.teams-container {
+    padding: 1rem;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #000000;
+    text-align: center;
+  }
+  
+  .teams-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+  
+  .team-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    justify-content: center;        /* 💡 centers the grid itself */
+  }
+  
+  @media (min-width: 640px) {
+    .team-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  .team-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+    width: 250px;                   /* 💡 consistent card width for centering */
+  }
+  
+  .team-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .team-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .team-details {
+    font-size: 0.9rem;
+    color: #333333;
+  }
+  
+  .team-record {
+    font-size: 0.9rem;
+    color: #007bff;
+    margin-top: 0.5rem;
+    font-weight: 500;
+  }
+  
