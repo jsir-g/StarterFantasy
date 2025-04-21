@@ -1,11 +1,41 @@
 from flask import Blueprint, jsonify
-from team import Team
+import psycopg
+import os
+from dotenv import load_dotenv
 
-team_bp = Blueprint("team", __name__)
+load_dotenv()
+
+DB_URL = os.getenv("NEON_DB_URL")
+
+team_bp = Blueprint("teams", __name__)
 
 @team_bp.route("/api/teams", methods=["GET"])
 def get_teams():
-    week = "08"
-    team_names = Team.teams_playing(week)
-    teams = [Team(name=team_name) for team_name in team_names]
-    return jsonify([team.__repr__() for team in teams])
+    try:
+        with psycopg.connect(DB_URL) as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT id, full_name, abbreviation, conference, division, wins, losses
+                    FROM teams
+                    WHERE full_name NOT ILIKE '%TBD%'
+                    ORDER BY full_name;
+                """)
+                rows = cur.fetchall()
+
+                teams = [
+                    {
+                        "id": row[0],
+                        "name": row[1],
+                        "abbreviation": row[2],
+                        "conference": row[3],
+                        "division": row[4],
+                        "wins": row[5],
+                        "losses": row[6],
+                    }
+                    for row in rows
+                ]
+
+        return jsonify(teams)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
