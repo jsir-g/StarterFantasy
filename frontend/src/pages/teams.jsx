@@ -6,7 +6,8 @@ export default function Teams() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/teams")
+    const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    fetch(`${apiBase}/api/teams`)
       .then((res) => res.json())
       .then((data) => {
         setTeams(data);
